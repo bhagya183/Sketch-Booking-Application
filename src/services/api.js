@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 //const API_URL = 'http://localhost:8080';
-const API_URL = 'https://sketchbooking-production.up.railway.app/';
+const API_URL = 'https://sketchbook-production.up.railway.app/';
 
 // Create axios instance with default config
 const api = axios.create({
