@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 //const API_URL = 'http://localhost:8080';
-const API_URL = 'https://sketchbook-production.up.railway.app/';
+const API_URL = 'https://sketchappserver-production.up.railway.app/';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -37,27 +37,27 @@ const uploadFile = async (file, sketchId) => {
 
 // Auth API calls
 export const authAPI = {
-  login: (credentials) => api.post('/auth/login', credentials),
-  register: (userData) => api.post('/auth/register', userData),
+  login: (credentials) => api.post(`${API_URL}/auth/login`, credentials),
+  register: (userData) => api.post(`${API_URL}/auth/register`, userData),
 };
 
 // User API calls
 export const userAPI = {
-  getProfile: () => api.get('/user-profiles'),
-  updatePassword: (passwordData) => api.put('/user/updatePassword', passwordData),
+  getProfile: () => api.get(`${API_URL}/user-profiles`),
+  updatePassword: (passwordData) => api.put(`${API_URL}/user/updatePassword`, passwordData),
 };
 
 // Artist API calls
 export const artistAPI = {
-  getAll: () => api.get('/artists'),
-  getById: (id) => api.get(`/artists/${id}`),
+  getAll: () => api.get(`${API_URL}/artists`),
+  getById: (id) => api.get(`${API_URL}/artists/${id}`),
   create: async (artistData, imageFile) => {
     try {
       if (imageFile) {
         const uploadResponse = await uploadFile(imageFile);
         artistData.image_url = uploadResponse.fileDownloadUri;
       }
-      return api.post('/artists', artistData);
+      return api.post(`${API_URL}/artists`, artistData);
     } catch (error) {
       console.error('Error creating artist:', error);
       throw error;
@@ -69,7 +69,7 @@ export const artistAPI = {
         const uploadResponse = await uploadFile(imageFile);
         artistData.image_url = uploadResponse.fileDownloadUri;
       }
-      return api.put(`/artists/${id}`, artistData);
+      return api.put(`${API_URL}/artists/${id}`, artistData);
     } catch (error) {
       console.error('Error updating artist:', error);
       throw error;
@@ -79,11 +79,11 @@ export const artistAPI = {
 
 // Sketch API calls
 export const sketchAPI = {
-  getAll: () => api.get('/sketches'),
-  getById: (id) => api.get(`/sketches/${id}`),
+  getAll: () => api.get(`${API_URL}/sketches`),
+  getById: (id) => api.get(`${API_URL}/sketches/${id}`),
   create: async (sketchData, imageFile) => {
     try {
-      const response = await api.post('/sketches', sketchData);
+      const response = await api.post(`${API_URL}/sketches`, sketchData);
       if (imageFile) {
         await uploadFile(imageFile, response.data.id);
       }
@@ -95,7 +95,7 @@ export const sketchAPI = {
   },
   update: async (id, sketchData, imageFile) => {
     try {
-      const response = await api.put(`/sketches/${id}`, sketchData);
+      const response = await api.put(`${API_URL}/sketches/${id}`, sketchData);
       if (imageFile) {
         await uploadFile(imageFile, id);
       }
@@ -109,10 +109,10 @@ export const sketchAPI = {
 
 // Booking API calls
 export const bookingAPI = {
-  create: (bookingData) => api.post('/bookings', bookingData),
-  getAll: () => api.get('/bookings'),
-  getById: (id) => api.get(`/bookings/${id}`),
-  updateStatus: (id, status) => api.put(`/bookings/${id}/status`, { status }),
+  create: (bookingData) => api.post(`${API_URL}/bookings`, bookingData),
+  getAll: () => api.get(`${API_URL}/bookings`),
+  getById: (id) => api.get(`${API_URL}/bookings/${id}`),
+  updateStatus: (id, status) => api.put(`${API_URL}/bookings/${id}/status`, { status }),
 };
 
 export default api; 
